@@ -65,11 +65,15 @@ class TestValueGenerator:
             response = self.llm.invoke(prompt)
             # Basic cleanup to ensure we get a list
             response_text = response.strip()
+            print("# FIRST RESPONSE")
+            print(response_text)
             if response_text.startswith("```json"):
                 response_text = response_text[7:-3]
             elif response_text.startswith("```"):
                 response_text = response_text[3:-3]
             
+            print("# SECOND RESPONSE")
+            print(response_text)
             values = json.loads(response_text)
             if isinstance(values, list):
                 return values

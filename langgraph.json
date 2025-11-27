@@ -1,0 +1,11 @@
+{
+    "dockerfile_lines": [],
+    "graphs": {
+        "testconf": "./testconf_agent/graph.py:get_testconf_agent_graph"
+    },
+    "python_version": "3.11",
+    "env": "./testconf_agent/.env",
+    "dependencies": [
+        "."
+    ]
+}

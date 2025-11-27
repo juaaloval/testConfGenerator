@@ -1,6 +1,6 @@
 llm:
-  model_id: "google/gemma-2b-it" # Default to a small model
-  temperature: 0.0
+  model_id: "meta-llama/Llama-3.2-3B-Instruct" # Default to a small model
+  temperature: 0.7
   max_new_tokens: 512
   device: "auto" # "cpu", "cuda", or "auto"
 

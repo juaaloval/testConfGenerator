@@ -32,10 +32,11 @@ class LLMFactory:
             "text-generation",
             model=model,
             tokenizer=tokenizer,
-            max_new_tokens=max_new_tokens,
+            # max_new_tokens=max_new_tokens,
             temperature=temperature,
-            do_sample=True if temperature > 0 else False,
-            repetition_penalty=1.1
+            # do_sample=True if temperature > 0 else False,
+            # repetition_penalty=1.1
+            return_full_text=False
         )
 
         logger.info("Wrapping in LangChain HuggingFacePipeline...")
