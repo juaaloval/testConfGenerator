@@ -62,7 +62,27 @@ def map_operations(state: OverallState):
 
     # Generate the Send objects
     # This creates a unique 'OperationState' for each branch
+    # General data
+    api_name = oas_spec.get("info", {}).get("title")
+    api_description = oas_spec.get("info", {}).get("description")
+    
+    # Operations
+    operations = []
+    for path, methods in oas_spec['paths'].items():
+        for method, op in methods.items():
+            operations.append({
+                "id": op["operationId"], 
+                "parameters": op["parameters"]
+            })
+    
     return [
-        Send("process_operation_batch", {"op_id": op["id"], "parameters": op["parameters"]})
+        Send("process_operation_batch",
+            {
+                "api_name": api_name,
+                "api_description": api_description,
+                "op_id": op["id"],
+                "parameters": op["parameters"]
+            }
+        )
         for op in operations
     ]

@@ -10,5 +10,7 @@ class OverallState(TypedDict):
 
 # Operation State: The input payload for a single Operation worker
 class OperationState(TypedDict):
+    api_name: str
+    api_description: str
     op_id: str
     parameters: List[dict]
