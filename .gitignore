@@ -1,2 +1,3 @@
 testconf_agent/.env
 testconf_agent/__pycache__
+.langgraph_api
