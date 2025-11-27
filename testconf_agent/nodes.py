@@ -20,9 +20,9 @@ def get_parameter_values_node(state):
         SystemMessage(content="You are an expert software tester specializing in REST APIs. Your task is to generate a list of meaningful and diverse test values for a specific API parameter."),
         # TODO: Improve prompt
         # TODO: At least include API and operation data
-        HumanMessage(content="""
+        HumanMessage(content=f"""
         Parameter Details:
-        {current_parameter}
+        {state["current_parameter"]}
         """)
     ]
 
