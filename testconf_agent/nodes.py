@@ -2,6 +2,7 @@ from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from typing import List, Union
 from langchain_core.messages import SystemMessage, HumanMessage
+import json
 
 # Requires environment variable OPENAI_API_KEY
 # TODO: Replace with Ollama in the future
@@ -59,3 +60,10 @@ def get_parameter_values_node(state):
         parameter_values = state["parameter_values"]
         parameter_values[parameter_name] = model_response.test_values
         return {"parameter_values": parameter_values}
+
+
+def generate_extended_test_configuration_node(state):
+    # For now, simply export the parameter values to a JSON file
+    with open("test_configuration.json", "w") as f:
+        json.dump(state["parameter_values"], f, indent=4)
+    return {}
