@@ -1,7 +1,6 @@
-from langgraph.graph import MessagesState
+from typing import TypedDict
 
-# TODO: Does it really need to be a message state? A simple TypedDict might be enough
-class TestConfGraphState(MessagesState):
+class TestConfGraphState(TypedDict):
     # TODO: Add missing state variables
     # TODO: Add current operation data (context for the model)
     # TODO: Add API name
