@@ -6,4 +6,4 @@ class TestConfGraphState(MessagesState):
     # TODO: Add current operation data (context for the model)
     # TODO: Add API name
     current_parameter: dict
-    values: list
+    parameter_values: dict
