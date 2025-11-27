@@ -24,46 +24,6 @@ def get_testconf_agent_graph():
 
     graph = builder.compile()
     return graph
-
-    # TODO: Apply this concurrency configuration for local LLMs
-    # CONFIGURATION:
-    # This is crucial for your Local LLM. 
-    # 'max_concurrency: 1' ensures that while the graph *structure* is parallel,
-    # the *execution* happens one operation at a time to save VRAM.
-    # config = {"max_concurrency": 1} 
-
-    # print("Starting Graph Execution...\n")
-    # result = graph.invoke(
-    #     {"oas_spec": dummy_spec, "final_report": []}, 
-    #     config=config
-    # )
-
-    # print("\n--- Final Aggregated Report ---")
-    # for line in result["final_report"]:
-    #     print(line)
-
-    # builder = StateGraph(OverallState)
-
-    # # Add nodes
-    # builder.add_node("input_node", input_node)
-    # builder.add_node("operation_manager", operation_manager)
-    # builder.add_node("parameter_worker", parameter_worker)
-
-    # # Edge 1: Start -> Input
-    # builder.add_edge(START, "input_node")
-
-    # # Edge 2: Input -> Map Operations (Conditional)
-    # builder.add_conditional_edges("input_node", map_operations, ["operation_manager"])
-
-    # # Edge 3: Operation Manager -> Map Parameters (Conditional)
-    # builder.add_conditional_edges("operation_manager", map_parameters, ["parameter_worker"])
-
-    # # Edge 4: Workers -> End (Merging happens automatically via reducer)
-    # builder.add_edge("parameter_worker", END)
-
-    # # Compile and return graph
-    # graph = builder.compile()
-    # return graph
     
     # Create graph
     # builder = StateGraph(TestConfGraphState)
