@@ -1,0 +1,8 @@
+llm:
+  model_id: "google/gemma-2b-it" # Default to a small model
+  temperature: 0.0
+  max_new_tokens: 512
+  device: "auto" # "cpu", "cuda", or "auto"
+
+generation:
+  max_retries: 3
