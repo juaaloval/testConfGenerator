@@ -14,3 +14,4 @@ class OperationState(TypedDict):
     api_description: str
     op_id: str
     parameters: List[dict]
+    # TODO: Add operation description/summary

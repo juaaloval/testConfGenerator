@@ -9,6 +9,7 @@ import json
 # TODO: Convert into configurable parameters
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0.7)
 
+# TODO: DELETE
 def extract_parameter_data_node(state):
     # TODO: Extract parameter data from state
     # TODO: Initialize parameter values in a different node in the future
