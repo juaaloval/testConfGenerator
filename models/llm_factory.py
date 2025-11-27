@@ -2,6 +2,9 @@ from typing import Any, Dict
 from langchain_huggingface import HuggingFacePipeline
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 import torch
+import logging
+
+logger = logging.getLogger(__name__)
 
 class LLMFactory:
     @staticmethod
@@ -14,7 +17,7 @@ class LLMFactory:
         max_new_tokens = llm_config.get('max_new_tokens', 512)
         device = llm_config.get('device', 'auto')
 
-        print(f"Loading model: {model_id} on {device}...")
+        logger.info(f"Loading model: {model_id} on {device}...")
         
         tokenizer = AutoTokenizer.from_pretrained(model_id)
         
@@ -24,7 +27,7 @@ class LLMFactory:
             torch_dtype=torch.float16 if device != "cpu" else torch.float32,
         )
 
-        print("Creating transformers pipeline...")
+        logger.info("Creating transformers pipeline...")
         pipe = pipeline(
             "text-generation",
             model=model,
@@ -35,7 +38,7 @@ class LLMFactory:
             repetition_penalty=1.1
         )
 
-        print("Wrapping in LangChain HuggingFacePipeline...")
+        logger.info("Wrapping in LangChain HuggingFacePipeline...")
         llm = HuggingFacePipeline(pipeline=pipe)
-        print("LLM initialized.")
+        logger.info("LLM initialized.")
         return llm

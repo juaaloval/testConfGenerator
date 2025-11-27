@@ -1,5 +1,8 @@
 import yaml
+import logging
 from typing import Dict, Any
+
+logger = logging.getLogger(__name__)
 
 class ConfigLoader:
     @staticmethod
@@ -12,5 +15,5 @@ class ConfigLoader:
                 config = yaml.safe_load(f)
             return config
         except FileNotFoundError:
-            print(f"Warning: Config file {config_path} not found. Using defaults.")
+            logger.warning(f"Config file {config_path} not found. Using defaults.")
             return {}

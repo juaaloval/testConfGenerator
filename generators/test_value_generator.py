@@ -1,8 +1,11 @@
 import json
+import logging
 from typing import Dict, Any, List
 from langchain_core.language_models import LLM
 from parsers.oas_parser import OperationInfo, ParameterInfo
 from generators.prompts import VALUE_GENERATION_PROMPT
+
+logger = logging.getLogger(__name__)
 
 class TestValueGenerator:
     def __init__(self, llm: LLM):
@@ -29,7 +32,7 @@ class TestValueGenerator:
                 oas_param = next((p for p in oas_op.parameters if p.name == param_name), None)
                 
                 if oas_param:
-                    print(f"Generating values for {op_id} -> {param_name}...")
+                    logger.info(f"Generating values for {op_id} -> {param_name}...")
                     new_values = self._generate_values_for_param(oas_param, oas_op.summary)
                     
                     if new_values:
@@ -71,8 +74,8 @@ class TestValueGenerator:
             if isinstance(values, list):
                 return values
             else:
-                print(f"Warning: LLM did not return a list for {param.name}. Response: {response_text}")
+                logger.warning(f"LLM did not return a list for {param.name}. Response: {response_text}")
                 return []
         except Exception as e:
-            print(f"Error generating values for {param.name}: {e}")
+            logger.error(f"Error generating values for {param.name}: {e}")
             return []

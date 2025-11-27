@@ -1,18 +1,26 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 import torch
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 model_id = "google/gemma-2b-it"
-print(f"Loading tokenizer for {model_id}...")
+logger.info(f"Loading tokenizer for {model_id}...")
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-print(f"Loading model for {model_id}...")
+logger.info(f"Loading model for {model_id}...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     device_map="auto",
     dtype=torch.float32, # Force float32 for CPU safety
 )
 
-print("Creating pipeline...")
+logger.info("Creating pipeline...")
 pipe = pipeline(
     "text-generation",
     model=model,
@@ -20,6 +28,6 @@ pipe = pipeline(
     max_new_tokens=50,
 )
 
-print("Generating test...")
+logger.info("Generating test...")
 result = pipe("Say hello")
-print(f"Result: {result}")
+logger.info(f"Result: {result}")
