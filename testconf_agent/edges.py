@@ -76,7 +76,7 @@ def map_operations(state: OverallState):
             })
     
     return [
-        Send("process_operation_batch",
+        Send("process_operation_parameters",
             {
                 "api_name": api_name,
                 "api_description": api_description,
