@@ -1,24 +1,14 @@
+from testconf_agent.oas_states import OperationState
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from typing import List, Union
 from langchain_core.messages import SystemMessage, HumanMessage
-import json
+
 
 # Requires environment variable OPENAI_API_KEY
 # TODO: Replace with Ollama in the future
 # TODO: Convert into configurable parameters
 llm = ChatOpenAI(model_name="gpt-4o", temperature=0.7)
-
-# TODO: DELETE
-def extract_parameter_data_node(state):
-    # TODO: Extract parameter data from state
-    # TODO: Initialize parameter values in a different node in the future
-    return {"current_parameter": {
-        "name": "location",
-        "description": "Required if either latitude or longitude is not provided. This string indicates the geographic area to be used when searching for businesses. Examples: 'New York City', 'NYC', '350 5th Ave, New York, NY 10118'. Businesses returned in the response may not be strictly within the specified location.",
-        "schema_type": "string"
-    }, "parameter_values": {}}
-
 
 # Pydantic Schema for the JSON Output containing the list of test values for an API parameter
 class ParameterValuesSchema(BaseModel):
@@ -29,20 +19,43 @@ class ParameterValuesSchema(BaseModel):
         description="A list of diverse, meaningful, and edge-case test values for the API parameter. The datatype of the values must match the datatype of the parameter."
     )
 
-def get_parameter_values_node(state):
 
-    parameter_name = state["current_parameter"].get("name")
+def process_operation_batch(state: OperationState):
+    """
+    This node receives ONE operation, but processes ALL its parameters 
+    sequentially inside a standard Python loop.
+    """
+    op_id = state['op_id']
+    params = state['parameters']
+    
+    print(f"--- [Node Start] Batch processing {op_id} ({len(params)} params) ---")
+    
+    # Local accumulation of results for this specific operation
+    batch_results = []
+    
+    # Iterate over params
+    for param in params:
+        p_name = param['name']
 
-    # Perform this step only if the parameter name is not None
-    if parameter_name:
+        # Skip parameter if the name is None
+        if not p_name:
+            continue
+        
+        # TODO: Improve prompts
+        # TODO: Add parameters such as number of values to generate
+        # TODO: Manage parameter values if None
         messages  = [
             SystemMessage(content="You are an expert software tester specializing in REST APIs. Your task is to generate a list of meaningful and diverse test values for a specific API parameter, " +
             "the values must be as diverse as possible."),
             # TODO: Improve prompt
             # TODO: At least include API and operation data
+            # TODO: Add operation description/summary
             HumanMessage(content=f"""
+            API name: {state.get('api_name')}
+            API description: {state.get('api_description')}
+            Operation id: {state['op_id']}
             Parameter Details:
-            {state["current_parameter"]}
+            {param}
             """)
         ]
 
@@ -55,16 +68,23 @@ def get_parameter_values_node(state):
         except Exception as e:
             # If the LLM fails to generate a valid JSON object, skip this parameter
             print(f"Error getting parameter values: {e}")
-            return {}
+            continue
 
-        # Update parameter values
-        parameter_values = state["parameter_values"]
-        parameter_values[parameter_name] = model_response.test_values
-        return {"parameter_values": parameter_values}
+        batch_results.append({
+            p_name: model_response.test_values
+        })
+    
+    # RETURN ONLY THE RESULTS
+    # Adds the results to the OverallState
+    # We return a dict matching OverallState to merge into 'final_report'.
+    # We do NOT return 'op_id' or 'parameters' to avoid global state write conflicts.
+    return {"final_report": batch_results}
 
 
+# TODO: Generate extended test configuration (real)
 def generate_extended_test_configuration_node(state):
     # For now, simply export the parameter values to a JSON file
     with open("test_configuration.json", "w") as f:
         json.dump(state["parameter_values"], f, indent=4)
     return {}
+    
