@@ -5,6 +5,6 @@ graph = get_testconf_agent_graph()
 
 # TODO: Test max_concurrency with RESTCountries or similar
 # graph.invoke(
-#     {"oas_path": "./examples/oas_yelp.yaml"}, 
+#     {"oas_path": "testconf_agent/examples/oas_restcountries.yaml"}, 
 #     config={"max_concurrency": 1}
 # )

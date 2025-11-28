@@ -68,6 +68,7 @@ def process_operation_parameters(state: OperationState):
             {param}
             """)
         ]
+        print(messages)
 
         # Configure the LLM to return a JSON object
         structured_llm = llm.with_structured_output(ParameterValuesSchema)
@@ -75,6 +76,7 @@ def process_operation_parameters(state: OperationState):
         # Get list of values from the LLM in JSON format
         try:
             model_response = structured_llm.invoke(messages)
+            print(model_response)
         except Exception as e:
             # If the LLM fails to generate a valid JSON object, skip this parameter
             print(f"Error getting parameter values: {e}")
