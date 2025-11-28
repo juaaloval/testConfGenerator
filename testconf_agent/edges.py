@@ -1,4 +1,4 @@
-from testconf_agent.oas_states import OverallState
+from testconf_agent.states import OverallState
 from langgraph.constants import Send
 
 def map_operations(state: OverallState):

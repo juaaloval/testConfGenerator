@@ -1,4 +1,4 @@
-from testconf_agent.oas_states import OperationState
+from testconf_agent.states import OperationState
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from typing import List, Union
