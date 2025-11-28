@@ -79,7 +79,7 @@ def process_operation_parameters(state: OperationState):
     # Adds the results to the OverallState
     # We return a dict matching OverallState to merge into 'final_report'.
     # We do NOT return 'op_id' or 'parameters' to avoid global state write conflicts.
-    return {"final_report": batch_results}
+    return {"final_report": {op_id: batch_results}}
 
 
 # TODO: Generate extended test configuration (real)
