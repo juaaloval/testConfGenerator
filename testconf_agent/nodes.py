@@ -1,5 +1,6 @@
 from testconf_agent.states import OperationState
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from typing import List, Union
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -9,7 +10,15 @@ import json
 # Requires environment variable OPENAI_API_KEY
 # TODO: Replace with Ollama in the future
 # TODO: Convert into configurable parameters
-llm = ChatOpenAI(model_name="gpt-4o", temperature=0.7)
+# llm = ChatOpenAI(model_name="gpt-4o", temperature=0.7)
+llm = ChatOllama(
+    # TODO: Model should be a configurable parameter
+    model="llama3.2:3b",
+    # model="gemma3:4b",
+    # TODO: Temperature should be a configurable parameter, change on specific tasks
+    temperature=0.7
+)
+
 
 # Pydantic Schema for the JSON Output containing the list of test values for an API parameter
 class ParameterValuesSchema(BaseModel):
