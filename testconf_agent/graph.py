@@ -4,8 +4,7 @@ from testconf_agent.TestConfGraphState import TestConfGraphState
 from testconf_agent.nodes import process_operation_batch, generate_extended_test_configuration_node
 
 from testconf_agent.oas_states import OverallState
-from testconf_agent.nodes import process_operation_batch
-from testconf_agent.oas_edges import map_operations
+from testconf_agent.edges import map_operations
 
 def get_testconf_agent_graph():
 
