@@ -24,8 +24,8 @@ def map_operations(state: OverallState):
     for path, methods in oas_spec['paths'].items():
         for method, op in methods.items():
             operations.append({
-                "id": op["operationId"], 
-                "parameters": op["parameters"]
+                "id": op.get("operationId"), 
+                "parameters": op.get("parameters", [])
             })
     
     return [
@@ -34,7 +34,7 @@ def map_operations(state: OverallState):
                 "api_name": api_name,
                 "api_description": api_description,
                 "op_id": op["id"],
-                "parameters": op["parameters"]
+                "parameters": op.get("parameters", [])
             }
         )
         for op in operations

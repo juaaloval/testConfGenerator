@@ -36,7 +36,7 @@ def process_operation_parameters(state: OperationState):
     sequentially inside a standard Python loop.
     """
     op_id = state['op_id']
-    params = state['parameters']
+    params = state.get('parameters', [])
     
     print(f"--- [Node Start] Batch processing {op_id} ({len(params)} params) ---")
     
@@ -63,7 +63,7 @@ def process_operation_parameters(state: OperationState):
             HumanMessage(content=f"""
             API name: {state.get('api_name')}
             API description: {state.get('api_description')}
-            Operation id: {state['op_id']}
+            Operation id: {state.get('op_id')}
             Parameter Details:
             {param}
             """)
