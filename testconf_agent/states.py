@@ -12,6 +12,7 @@ def merge_dicts(existing: dict, new_data: dict) -> dict:
 
 # Global State: Tracks the Spec and the Aggregated Report
 class OverallState(TypedDict):
+    oas_path: str
     oas_spec: dict
     # This reducer ensures results from parallel branches are merged, not overwritten
     # Equivalent to test values
