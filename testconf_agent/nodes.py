@@ -78,6 +78,7 @@ def process_operation_parameters(state: OperationState):
 
         # Get list of values from the LLM in JSON format
         try:
+            # TODO: Add retry logic and timeout parameter
             model_response = structured_llm.invoke(messages)
             test_values = model_response.test_values
             print(model_response)
@@ -89,13 +90,6 @@ def process_operation_parameters(state: OperationState):
 
         # Export to CSV
         pd.Series(test_values).to_csv(get_test_values_filename(method, path, param['name']), index=False, header=False)
-    
-    # RETURN ONLY THE RESULTS
-    # Adds the results to the OverallState
-    # We return a dict matching OverallState to merge into 'final_report'.
-    # We do NOT return 'op_id' or 'parameters' to avoid global state write conflicts.
-    # TODO: THIS SHOULD NOT RETURN ANYTHING, DELETE
-    return {"final_report": {op_id: batch_results}}
 
 
 def get_test_values_filename(method, path, param_name):
@@ -104,11 +98,3 @@ def get_test_values_filename(method, path, param_name):
     in lowercase and replacing '/' with '_'.
     """
     return f"{method}_{path}_{param_name}.csv".replace(" ", "_").replace("/", "_").replace("{", "_").replace("}", "_").lower()
-
-# TODO: DELETE
-def generate_extended_test_configuration_node(state):
-    # For now, simply export the parameter values to a JSON file
-    with open("test_configuration.json", "w") as f:
-        json.dump(state["final_report"], f, indent=4)
-    return {}
-    
