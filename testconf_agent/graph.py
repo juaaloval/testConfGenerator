@@ -15,10 +15,11 @@ def get_testconf_agent_graph():
 
     # Add the conditional edge (The Map)
     builder.add_conditional_edges(START, map_operations, ["process_operation_parameters"])
+    builder.add_edge("process_operation_parameters", END)
 
     # Add the return edge
-    builder.add_edge("process_operation_parameters", "generate_extended_test_configuration")
-    builder.add_edge("generate_extended_test_configuration", END)
+    # builder.add_edge("process_operation_parameters", "generate_extended_test_configuration")
+    # builder.add_edge("generate_extended_test_configuration", END)
 
     graph = builder.compile()
     return graph

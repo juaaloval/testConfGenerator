@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from typing import List, Union
 from langchain_core.messages import SystemMessage, HumanMessage
 import json
+import pandas as pd
 
 
 # Requires environment variable OPENAI_API_KEY
@@ -36,6 +37,8 @@ def process_operation_parameters(state: OperationState):
     sequentially inside a standard Python loop.
     """
     op_id = state['op_id']
+    path = state['path']
+    method = state['method']
     params = state.get('parameters', [])
     
     print(f"--- [Node Start] Batch processing {op_id} ({len(params)} params) ---")
@@ -76,24 +79,33 @@ def process_operation_parameters(state: OperationState):
         # Get list of values from the LLM in JSON format
         try:
             model_response = structured_llm.invoke(messages)
+            test_values = model_response.test_values
             print(model_response)
         except Exception as e:
             # If the LLM fails to generate a valid JSON object, skip this parameter
+            # TODO: Add default values depending on the parameter datatype
             print(f"Error getting parameter values: {e}")
-            continue
+            test_values = []
 
-        batch_results.append({
-            p_name: model_response.test_values
-        })
+        # Export to CSV
+        pd.Series(test_values).to_csv(get_test_values_filename(method, path, param['name']), index=False, header=False)
     
     # RETURN ONLY THE RESULTS
     # Adds the results to the OverallState
     # We return a dict matching OverallState to merge into 'final_report'.
     # We do NOT return 'op_id' or 'parameters' to avoid global state write conflicts.
+    # TODO: THIS SHOULD NOT RETURN ANYTHING, DELETE
     return {"final_report": {op_id: batch_results}}
 
 
-# TODO: Generate extended test configuration (real)
+def get_test_values_filename(method, path, param_name):
+    """
+    Returns a filename for the test values file. The value of the filename is <method>_<path>_<param_name>.csv,
+    in lowercase and replacing '/' with '_'.
+    """
+    return f"{method}_{path}_{param_name}.csv".replace(" ", "_").replace("/", "_").replace("{", "_").replace("}", "_").lower()
+
+# TODO: DELETE
 def generate_extended_test_configuration_node(state):
     # For now, simply export the parameter values to a JSON file
     with open("test_configuration.json", "w") as f:
