@@ -10,6 +10,10 @@ class OverallState(TypedDict):
 class OperationState(TypedDict):
     api_name: str
     api_description: str
-    op_id: str
+    method: str
+    path: str
+    op_id: str  
+    summary: str
+    description: str    
     parameters: List[dict]
-    # TODO: Add operation description/summary
+    

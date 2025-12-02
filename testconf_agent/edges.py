@@ -25,9 +25,11 @@ def map_operations(state: OverallState):
         for method, op in methods.items():
             operations.append({
                 "id": op.get("operationId"), 
-                "parameters": op.get("parameters", []),
+                "summary": op.get("summary"),
+                "description": op.get("description"),
                 "path": path,
-                "method": method
+                "method": method,
+                "parameters": op.get("parameters", []),
             })
     
     return [
@@ -35,10 +37,12 @@ def map_operations(state: OverallState):
             {
                 "api_name": api_name,
                 "api_description": api_description,
-                "op_id": op["id"],
-                "path": op["path"],
                 "method": op["method"],
-                "parameters": op.get("parameters", [])
+                "path": op["path"],
+                "op_id": op["id"],
+                "summary": op["summary"],
+                "description": op["description"],                
+                "parameters": op["parameters"]
             }
         )
         for op in operations

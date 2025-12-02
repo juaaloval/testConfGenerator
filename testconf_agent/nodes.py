@@ -8,10 +8,7 @@ import json
 import pandas as pd
 
 
-# Requires environment variable OPENAI_API_KEY
-# TODO: Replace with Ollama in the future
 # TODO: Convert into configurable parameters
-# llm = ChatOpenAI(model_name="gpt-4o", temperature=0.7)
 llm = ChatOllama(
     # TODO: Model should be a configurable parameter
     model="llama3.2:3b",
@@ -89,7 +86,7 @@ def process_operation_parameters(state: OperationState):
             test_values = []
 
         # Export to CSV
-        pd.Series(test_values).to_csv(get_test_values_filename(method, path, param['name']), index=False, header=False)
+        pd.Series(test_values).to_csv(get_test_values_filename(method, path, p_name), index=False, header=False)
 
 
 def get_test_values_filename(method, path, param_name):
