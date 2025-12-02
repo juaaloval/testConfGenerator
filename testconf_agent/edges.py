@@ -29,6 +29,7 @@ def map_operations(state: OverallState):
                 "path": path,
                 "method": method,
                 "parameters": op.get("parameters", []),
+                "request_body": op.get("requestBody", {}).get("content", {}).get("application/json", None)
             })
     
     return [
@@ -41,7 +42,8 @@ def map_operations(state: OverallState):
                 "op_id": op["id"],
                 "summary": op["summary"],
                 "description": op["description"],                
-                "parameters": op["parameters"]
+                "parameters": op["parameters"],
+                "request_body": op["request_body"]
             }
         )
         for op in operations

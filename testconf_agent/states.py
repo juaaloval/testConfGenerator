@@ -16,4 +16,5 @@ class OperationState(TypedDict):
     summary: str
     description: str    
     parameters: List[dict]
+    request_body: dict
     
