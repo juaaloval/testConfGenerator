@@ -54,6 +54,9 @@ def process_operation_parameters(state: OperationState):
         # TODO: Improve prompts
         # TODO: Add parameters such as number of values to generate
         # TODO: Manage parameter values if None
+        # TODO: Test $refs
+        # TODO: Add operation description/summary
+        # TODO: Specify JSON Schema for the body parameters
         messages  = [
             SystemMessage(content="You are an expert software tester specializing in REST APIs. Your task is to generate a list of meaningful and diverse test values for a specific API parameter, " +
             "the values must be as diverse as possible."),

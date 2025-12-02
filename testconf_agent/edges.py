@@ -1,6 +1,7 @@
 from testconf_agent.states import OverallState
 from langgraph.constants import Send
 import yaml
+import jsonref
 
 def map_operations(state: OverallState):
     """
@@ -8,14 +9,12 @@ def map_operations(state: OverallState):
     """
     print("--- [Main] Reading Spec and Fanning Out ---")
 
-    # TODO: Surround with try/except
-    with open(state['oas_path'], 'r', encoding='utf-8') as f:
-            oas_spec = yaml.safe_load(f)
+    oas_spec = load_oas_spec(state['oas_path'])
 
     # Generate the Send objects
     # This creates a unique 'OperationState' for each branch
     # General data
-    # TODO: Improve spec analysis (use another library, body objects, etc.)
+    # TODO: Address $ref
     api_name = oas_spec.get("info", {}).get("title")
     api_description = oas_spec.get("info", {}).get("description")
     
@@ -47,3 +46,16 @@ def map_operations(state: OverallState):
         )
         for op in operations
     ]
+
+
+# TODO: Move to a different file
+def load_oas_spec(oas_path: str):
+    """
+    Load OAS spec from file and resolve $refs.
+    """
+    # Load the raw yaml file
+    with open(oas_path, "r") as f:
+        raw_obj = yaml.safe_load(f)
+    
+    # Resolve $refs
+    return jsonref.replace_refs(raw_obj)
