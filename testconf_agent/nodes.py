@@ -91,15 +91,13 @@ def generate_param_value(state: OperationState, param: dict):
     
     # Get list of values from the LLM in JSON format
     try:
-        # TODO: Add retry logic and timeout parameter
         model_response = structured_llm.invoke(messages)
         test_values = model_response.test_values
         print(model_response)
     except Exception as e:
-        # If the LLM fails to generate a valid JSON object, skip this parameter
-        # TODO: Add default values depending on the parameter datatype
-        print(f"Error getting parameter values: {e}")
-        test_values = []
+        # If the LLM fails to generate a valid JSON object, use default values.
+        print(f"Error getting parameter values: {e}, using default values instead.")
+        test_values = get_default_values()
     
     # Export to CSV
     pd.Series(test_values).to_csv(get_test_values_filename(state["method"], state["path"], param["name"]), index=False, header=False)
@@ -130,10 +128,53 @@ def generate_request_body(state: OperationState, schema: dict):
         print(body_value)
     except Exception as e:
         # If the LLM fails to generate a valid JSON object, skip this parameter
-        # TODO: Add default values depending on the parameter datatype
         print(f"Error getting request body: {e}")
         body_value = {}
 
     # Export to JSON
     with open(get_test_values_filename(state["method"], state["path"], "body", "json"), "w") as f:
         json.dump(body_value, f)
+
+
+def get_default_values():
+    """
+    Returns a list of default values for a parameter in case the LLM generation fails.
+    """
+    return [
+    # Strings / Text Fields
+    "!!!_GENERATOR_FAIL_DEFAULT_!!!",
+    "",
+    "{fallback_string}",
+    "X" * 255,
+
+    # Numbers / Integers / Floats
+    -1,
+    0,
+    999999,
+    2147483647,
+    0.00,
+    -1.0,
+
+    # Booleans
+    False,
+    True,
+
+    # IDs / Specific Formats
+    "00000000-0000-0000-0000-000000000000",
+    "fallback-test@api.local",
+    "http://localhost/generator-failed",
+    "127.0.0.1",
+
+    # Dates / Times (ISO 8601 Format)
+    "1970-01-01T00:00:00Z",
+    "2099-12-31T23:59:59Z",
+    "2025-01-01T12:00:00Z",
+
+    # Complex/Structural (JSON)
+    {},
+    [],
+    {"error": "generator_failed"},
+
+    # Null Value
+    None
+]
