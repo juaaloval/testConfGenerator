@@ -2,13 +2,16 @@ from testconf_agent.states import OverallState
 from langgraph.constants import Send
 import yaml
 import jsonref
+from testconf_agent.logger import setup_logger
+
+logger = setup_logger()
 
 
 def map_operations(state: OverallState):
     """
     Fans out execution: One branch per Operation.
     """
-    print("--- [Main] Reading Spec and Fanning Out ---")
+    logger.info("--- [Main] Reading Spec and Fanning Out ---")
 
     oas_spec = load_oas_spec(state['oas_path'])
 

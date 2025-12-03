@@ -9,6 +9,9 @@ import pandas as pd
 from langchain_core.output_parsers import JsonOutputParser
 from testconf_agent.utils import ConfigLoader
 from testconf_agent.prompts import PARAM_GENERATION_PROMPT, PARAM_SYSTEM_PROMPT, BODY_SYSTEM_PROMPT, BODY_GENERATION_PROMPT
+from testconf_agent.logger import setup_logger
+
+logger = setup_logger()
 
 # Load config info
 config = ConfigLoader.load()
@@ -38,7 +41,7 @@ def process_operation_parameters(state: OperationState):
     sequentially inside a standard Python loop.
     """
     
-    print(f"--- [Node Start] Batch processing {state['op_id']} ({len(state.get('parameters', []))} params) ---")
+    logger.info(f"--- [Node Start] Batch processing {state['op_id']} ({len(state.get('parameters', []))} params) ---")
     
     # Local accumulation of results for this specific operation
     batch_results = []
@@ -86,6 +89,9 @@ def generate_param_value(state: OperationState, param: dict):
         )
     ]
 
+    logger.info("Parameter prompt: ")
+    logger.info(messages)
+    logger.info("Generating parameter values...")
     # Configure the LLM to return a JSON object
     structured_llm = llm.with_structured_output(ParameterValuesSchema)
     
@@ -93,12 +99,12 @@ def generate_param_value(state: OperationState, param: dict):
     try:
         model_response = structured_llm.invoke(messages)
         test_values = model_response.test_values
-        print(model_response)
     except Exception as e:
         # If the LLM fails to generate a valid JSON object, use default values.
-        print(f"Error getting parameter values: {e}, using default values instead.")
+        logger.error(f"Error getting parameter values: {e}, using default values instead.")
         test_values = get_default_values()
     
+    logger.info(f"Generated parameter values: {test_values}")
     # Export to CSV
     pd.Series(test_values).to_csv(get_test_values_filename(state["method"], state["path"], param["name"]), index=False, header=False)
 
@@ -117,6 +123,9 @@ def generate_request_body(state: OperationState, schema: dict):
         )
     ]
 
+    logger.info("Body prompt: ")
+    logger.info(messages)
+    logger.info("Generating request body...")
     # Call LLM like in previous function, but generating a JSON file
     try:
 
@@ -124,13 +133,15 @@ def generate_request_body(state: OperationState, schema: dict):
         chain = llm | parser
 
         body_value = chain.invoke(messages)
-        print("BODY VALUE:")
-        print(body_value)
+        logger.info("BODY VALUE:")
+        logger.info(body_value)
     except Exception as e:
         # If the LLM fails to generate a valid JSON object, skip this parameter
-        print(f"Error getting request body: {e}")
+        logger.error(f"Error getting request body: {e}")
         body_value = {}
 
+    logger.info("Request body: ")
+    logger.info(body_value)
     # Export to JSON
     with open(get_test_values_filename(state["method"], state["path"], "body", "json"), "w") as f:
         json.dump(body_value, f)
