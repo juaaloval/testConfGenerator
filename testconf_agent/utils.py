@@ -6,14 +6,27 @@ logger = logging.getLogger(__name__)
 
 class ConfigLoader:
     @staticmethod
-    def load(config_path: str) -> Dict[str, Any]:
+    def load() -> Dict[str, Any]:
         """
         Loads the configuration from a YAML file.
         """
         try:
-            with open(config_path, 'r') as f:
+            with open("../config.yaml", 'r') as f:
                 config = yaml.safe_load(f)
             return config
         except FileNotFoundError:
-            logger.warning(f"Config file {config_path} not found. Using defaults.")
-            return {}
+            logger.warning("Config file not found.")
+            return {
+                "llm": {
+                    "model_id": "llama3.2:3b",
+                    "temperature": 0.7,
+                    "device": "auto",
+                    "max_tokens": 3000
+                },
+                "generation": {
+                    "max_retries": 3,
+                    "timeout": 10,
+                    "n_valid_values": 10,
+                    "n_invalid_values": 2
+                }
+            }

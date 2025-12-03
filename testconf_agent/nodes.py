@@ -8,15 +8,17 @@ import json
 import pandas as pd
 from langchain_core.output_parsers import JsonOutputParser
 from testconf_agent.utils import ConfigLoader
+from testconf_agent.prompts import PARAM_GENERATION_PROMPT, PARAM_SYSTEM_PROMPT, BODY_SYSTEM_PROMPT, BODY_GENERATION_PROMPT
 
 # Load config info
-config = ConfigLoader.load("config.yaml")
+config = ConfigLoader.load()
 
 # Load LLM from config
 llm = ChatOllama(
     model=config.get("llm").get("model_id"),
     temperature=config.get("llm").get("temperature"),
-    device=config.get("llm").get("device")
+    device=config.get("llm").get("device"),
+    max_tokens=config.get("llm").get("max_tokens")
 )
 
 
@@ -70,25 +72,14 @@ def get_test_values_filename(method, path, param_name, extension="csv"):
 
 
 def generate_param_value(state: OperationState, param: dict):
-    # TODO: Improve prompts
-        # TODO: Add parameters such as number of values to generate
-        # TODO: Manage parameter values if None
-        # TODO: Test $refs
-        # TODO: Add operation description/summary
-        # TODO: Specify JSON Schema for the body parameters
     messages = [
-        SystemMessage(content="You are an expert software tester specializing in REST APIs. Your task is to generate a list of meaningful and diverse test values for a specific API parameter, " +
-        "the values must be as diverse as possible."),
-        # TODO: Improve prompt
-        # TODO: At least include API and operation data
-        # TODO: Add operation description/summary
-        HumanMessage(content=f"""
-        API name: {state.get('api_name')}
-        API description: {state.get('api_description')}
-        Operation id: {state.get('op_id')}
-        Parameter Details:
-        {param}
-        """)
+        SystemMessage(content=PARAM_SYSTEM_PROMPT),
+        HumanMessage(content=PARAM_GENERATION_PROMPT.format(
+            api_name=state.get('api_name'), 
+            api_description=state.get('api_description'), 
+            operation_id=state.get('op_id'), 
+            parameter_details=param)
+        )
     ]
 
     # Configure the LLM to return a JSON object
@@ -112,17 +103,14 @@ def generate_param_value(state: OperationState, param: dict):
 
 def generate_request_body(state: OperationState, schema: dict):
     messages = [
-        SystemMessage(content="You are an expert software tester specializing in REST APIs. Your task is to generate a valid JSON body containing the properties specified in following schema."),
-        # TODO: Improve prompt
-        # TODO: At least include API and operation data
-        # TODO: Add operation description/summary
-        HumanMessage(content=f"""
-        API name: {state.get('api_name')}
-        API description: {state.get('api_description')}
-        Operation id: {state.get('op_id')}
-        Body schema:
-        {schema}
-        """)
+        SystemMessage(content=BODY_SYSTEM_PROMPT),
+        
+        HumanMessage(content=BODY_GENERATION_PROMPT.format(
+            api_name=state.get('api_name'), 
+            api_description=state.get('api_description'), 
+            operation_id=state.get('op_id'), 
+            schema=schema)
+        )
     ]
 
     # Call LLM like in previous function, but generating a JSON file

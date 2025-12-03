@@ -14,7 +14,6 @@ def map_operations(state: OverallState):
     # Generate the Send objects
     # This creates a unique 'OperationState' for each branch
     # General data
-    # TODO: Address $ref
     api_name = oas_spec.get("info", {}).get("title")
     api_description = oas_spec.get("info", {}).get("description")
     
@@ -50,7 +49,6 @@ def map_operations(state: OverallState):
     ]
 
 
-# TODO: Move to a different file
 def load_oas_spec(oas_path: str):
     """
     Load OAS spec from file and resolve $refs.
