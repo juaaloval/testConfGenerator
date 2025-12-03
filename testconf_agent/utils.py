@@ -21,11 +21,11 @@ class ConfigLoader:
                 "llm": {
                     "model_id": "llama3.2:3b",
                     "temperature": 0.7,
-                    "device": "auto",
+                    "device": "cpu",
                     "max_tokens": 3000
                 },
                 "generation": {
-                    "n_valid_values": 10,
-                    "n_invalid_values": 2
+                    "n_valid_values": 9,
+                    "n_invalid_values": 1
                 }
             }
