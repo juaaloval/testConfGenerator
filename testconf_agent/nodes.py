@@ -7,13 +7,16 @@ from langchain_core.messages import SystemMessage, HumanMessage
 import json
 import pandas as pd
 from langchain_core.output_parsers import JsonOutputParser
+from testconf_agent.utils import ConfigLoader
 
-# TODO: Convert into configurable parameters
+# Load config info
+config = ConfigLoader.load("config.yaml")
+
+# Load LLM from config
 llm = ChatOllama(
-    # TODO: Model should be a configurable parameter
-    model="llama3.2:3b",
-    # TODO: Temperature should be a configurable parameter, change on specific tasks
-    temperature=0.7
+    model=config.get("llm").get("model_id"),
+    temperature=config.get("llm").get("temperature"),
+    device=config.get("llm").get("device")
 )
 
 
