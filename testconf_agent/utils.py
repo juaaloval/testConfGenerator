@@ -25,8 +25,6 @@ class ConfigLoader:
                     "max_tokens": 3000
                 },
                 "generation": {
-                    "max_retries": 3,
-                    "timeout": 10,
                     "n_valid_values": 10,
                     "n_invalid_values": 2
                 }

@@ -5,7 +5,5 @@ llm:
   max_tokens: 3000
 
 generation:
-  max_retries: 3  # Number of retries per parameter, considering timeout
-  timeout: 10 # Timeout per parameter in seconds
   n_valid_values: 10
   n_invalid_values: 2

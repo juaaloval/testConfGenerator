@@ -72,11 +72,16 @@ def get_test_values_filename(method, path, param_name, extension="csv"):
 
 def generate_param_value(state: OperationState, param: dict):
     messages = [
-        SystemMessage(content=PARAM_SYSTEM_PROMPT),
+        SystemMessage(content=PARAM_SYSTEM_PROMPT.format(
+            n_valid_values=config.get("generation").get("n_valid_values"),
+            n_invalid_values=config.get("generation").get("n_invalid_values")
+        )),
         HumanMessage(content=PARAM_GENERATION_PROMPT.format(
             api_name=state.get('api_name'), 
             api_description=state.get('api_description'), 
             operation_id=state.get('op_id'), 
+            operation_summary=state.get('summary'), 
+            operation_description=state.get('description'), 
             parameter_details=param)
         )
     ]
@@ -108,6 +113,8 @@ def generate_request_body(state: OperationState, schema: dict):
             api_name=state.get('api_name'), 
             api_description=state.get('api_description'), 
             operation_id=state.get('op_id'), 
+            operation_summary=state.get('summary'), 
+            operation_description=state.get('description'), 
             schema=schema)
         )
     ]
