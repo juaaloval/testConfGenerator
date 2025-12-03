@@ -1,4 +1,5 @@
-from typing import TypedDict, List
+# from typing import TypedDict, List
+from typing_extensions import TypedDict, List
 
 
 # Global State: Tracks the Spec and the Aggregated Report

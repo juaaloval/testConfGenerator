@@ -1,5 +1,4 @@
 from testconf_agent.states import OperationState
-from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from typing import List, Union

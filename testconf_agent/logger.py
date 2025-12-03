@@ -1,6 +1,7 @@
 import logging
 import sys
 
+
 def setup_logger(name: str = "testconf_agent") -> logging.Logger:
     """
     Sets up a logger with a standard format.
