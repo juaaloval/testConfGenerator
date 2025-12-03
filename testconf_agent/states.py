@@ -6,6 +6,7 @@ class OverallState(TypedDict):
     oas_path: str
     oas_spec: dict
 
+
 # Operation State: The input payload for a single Operation worker
 class OperationState(TypedDict):
     api_name: str

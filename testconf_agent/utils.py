@@ -4,6 +4,7 @@ from typing import Dict, Any
 
 logger = logging.getLogger(__name__)
 
+
 class ConfigLoader:
     @staticmethod
     def load() -> Dict[str, Any]:

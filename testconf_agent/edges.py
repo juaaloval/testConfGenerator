@@ -3,6 +3,7 @@ from langgraph.constants import Send
 import yaml
 import jsonref
 
+
 def map_operations(state: OverallState):
     """
     Fans out execution: One branch per Operation.

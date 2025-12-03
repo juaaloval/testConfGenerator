@@ -70,7 +70,6 @@ def get_test_values_filename(method, path, param_name, extension="csv"):
     return f"{method}_{path}_{param_name}.{extension}".replace(" ", "_").replace("/", "_").replace("{", "_").replace("}", "_").lower()
 
 
-
 def generate_param_value(state: OperationState, param: dict):
     messages = [
         SystemMessage(content=PARAM_SYSTEM_PROMPT),

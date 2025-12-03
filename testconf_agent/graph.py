@@ -5,6 +5,7 @@ from testconf_agent.nodes import process_operation_parameters
 from testconf_agent.states import OverallState
 from testconf_agent.edges import map_operations
 
+
 def get_testconf_agent_graph():
 
     builder = StateGraph(OverallState)
