@@ -12,7 +12,7 @@ class ConfigLoader:
         Loads the configuration from a YAML file.
         """
         try:
-            with open("../config.yaml", 'r') as f:
+            with open("config.yaml", 'r') as f:
                 config = yaml.safe_load(f)
             return config
         except FileNotFoundError:
