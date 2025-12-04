@@ -6,12 +6,14 @@ from typing_extensions import TypedDict, List
 class OverallState(TypedDict):
     oas_path: str
     oas_spec: dict
+    output_directory: str
 
 
 # Operation State: The input payload for a single Operation worker
 class OperationState(TypedDict):
     api_name: str
     api_description: str
+    output_directory: str
     method: str
     path: str
     op_id: str  

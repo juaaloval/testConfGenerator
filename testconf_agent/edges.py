@@ -40,6 +40,7 @@ def map_operations(state: OverallState):
             {
                 "api_name": api_name,
                 "api_description": api_description,
+                "output_directory": state["output_directory"],
                 "method": op["method"],
                 "path": op["path"],
                 "op_id": op["id"],

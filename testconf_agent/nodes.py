@@ -1,3 +1,5 @@
+import os
+
 from testconf_agent.states import OperationState
 from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
@@ -63,6 +65,10 @@ def process_operation_parameters(state: OperationState):
         # Generate request body in JSON format
         generate_request_body(state, request_body.get('schema'))        
 
+def get_test_values_filepath(output_directory, method, path, param_name, extension="csv"):
+    os.makedirs(output_directory, exist_ok=True)
+    return f"{output_directory}/{get_test_values_filename(method, path, param_name, extension)}"
+
 
 def get_test_values_filename(method, path, param_name, extension="csv"):
     """
@@ -105,7 +111,12 @@ def generate_param_value(state: OperationState, param: dict):
     
     logger.info(f"Generated parameter values: {test_values}")
     # Export to CSV
-    pd.Series(test_values).to_csv(get_test_values_filename(state["method"], state["path"], param["name"]), index=False, header=False)
+    pd.Series(test_values).to_csv(
+      get_test_values_filepath(state["output_directory"], state["method"],
+                               state["path"], param["name"]),
+      index=False,
+      header=False
+    )
 
 
 def generate_request_body(state: OperationState, schema: dict):
@@ -142,7 +153,10 @@ def generate_request_body(state: OperationState, schema: dict):
     logger.info("Request body: ")
     logger.info(body_value)
     # Export to JSON
-    with open(get_test_values_filename(state["method"], state["path"], "body", "json"), "w") as f:
+    filepath = get_test_values_filepath(state["output_directory"],
+                                        state["method"], state["path"], "body",
+                                        extension="json")
+    with open(filepath, "w") as f:
         json.dump(body_value, f)
 
 
