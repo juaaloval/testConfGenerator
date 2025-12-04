@@ -94,9 +94,9 @@ def generate_param_value(state: OperationState, param: dict):
         )
     ]
 
-    logger.info("Parameter prompt: ")
-    logger.info(messages)
-    logger.info("Generating parameter values...")
+    logger.info(f"Generating '{param['name']}' parameter values for the '{state.get('op_id')}' operation...")
+    logger.debug("Parameter prompt: ")
+    logger.debug(messages)
     # Configure the LLM to return a JSON object
     structured_llm = llm.with_structured_output(ParameterValuesSchema)
     
