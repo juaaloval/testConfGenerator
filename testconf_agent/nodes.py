@@ -73,9 +73,9 @@ def get_test_values_filepath(output_directory, method, path, param_name, extensi
 def get_test_values_filename(method, path, param_name, extension="csv"):
     """
     Returns a filename for the test values file. The value of the filename is <method>_<path>_<param_name>.csv,
-    in lowercase and replacing '/' with '_'.
+    and replacing '/' with '_'.
     """
-    return f"{method}_{path}_{param_name}.{extension}".replace(" ", "_").replace("/", "_").replace("{", "_").replace("}", "_").lower()
+    return f"{method}_{path}_{param_name}.{extension}".replace(" ", "_").replace("/", "_").replace("{", "_").replace("}", "_")
 
 
 def generate_param_value(state: OperationState, param: dict):
