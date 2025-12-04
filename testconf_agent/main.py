@@ -20,7 +20,7 @@ def main():
 
   graph.invoke(
       {"oas_path": args.oas_path, "output_directory": args.output_directory},
-      # config={"max_concurrency": 1}
+      config={"max_concurrency": 1}
   )
 
 
