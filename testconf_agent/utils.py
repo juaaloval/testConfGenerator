@@ -19,8 +19,8 @@ class ConfigLoader:
             logger.warning("Config file not found.")
             return {
                 "llm": {
-                    "model_id": "llama3.2:3b",
-                    "temperature": 0.7,
+                    "model_path": "model/llama_32_3B_Q4_K_M.gguf", # Path to the local LLM
+                    "temperature": 0.3,
                     "device": "cpu",
                     "max_tokens": 3000
                 },

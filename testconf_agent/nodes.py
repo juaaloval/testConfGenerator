@@ -1,7 +1,6 @@
 import os
 
 from testconf_agent.states import OperationState
-from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from typing import List, Union
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -11,18 +10,20 @@ from langchain_core.output_parsers import JsonOutputParser
 from testconf_agent.utils import ConfigLoader
 from testconf_agent.prompts import PARAM_GENERATION_PROMPT, PARAM_SYSTEM_PROMPT, BODY_SYSTEM_PROMPT, BODY_GENERATION_PROMPT
 from testconf_agent.logger import setup_logger
+from langchain_community.chat_models import ChatLlamaCpp
 
 logger = setup_logger()
 
 # Load config info
 config = ConfigLoader.load()
 
-# Load LLM from config
-llm = ChatOllama(
-    model=config.get("llm").get("model_id"),
+# Model configuration
+llm = ChatLlamaCpp(
+    model_path=config.get("llm").get("model_path"),
     temperature=config.get("llm").get("temperature"),
+    max_tokens=config.get("llm").get("max_tokens"),
     device=config.get("llm").get("device"),
-    max_tokens=config.get("llm").get("max_tokens")
+    n_ctx=8192
 )
 
 
