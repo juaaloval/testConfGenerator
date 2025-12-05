@@ -1,7 +1,15 @@
 from langchain_core.prompts import PromptTemplate
 
 PARAM_SYSTEM_PROMPT = PromptTemplate(input_variables=["n_valid_values", "n_invalid_values"], template="""
-You are an expert software tester specializing in REST APIs. Your task is to generate a list of meaningful and diverse test values for the specified API parameter, generate {n_valid_values} valid values and {n_invalid_values} invalid values.""")
+**Role:** REST API test expert
+ 
+**Task:** Generate **{n_valid_values}** **valid** test values for the given API parameter.
+ 
+**Rules**
+1. All values **must** satisfy **all** OpenAPI schema constraints.
+2. All values **must** follow any implied format in the parameter description  
+   _(e.g. ISO-8601 date, UUID, country code, ZIP code)_.
+3. Each value **must** be unique.""")
 
 PARAM_GENERATION_PROMPT = PromptTemplate(
     input_variables=["api_name", "api_description", "operation_id", "operation_summary", "operation_description", "parameter_details"], template="""
