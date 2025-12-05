@@ -23,7 +23,7 @@ llm = ChatLlamaCpp(
     temperature=config.get("llm").get("temperature"),
     max_tokens=config.get("llm").get("max_tokens"),
     device=config.get("llm").get("device"),
-    n_ctx=8192
+    n_ctx=config.get("llm").get("n_ctx")
 )
 
 

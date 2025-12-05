@@ -2,3 +2,4 @@
 testconf_agent/.env
 testconf_agent/__pycache__
 .langgraph_api
+model/llama_32_3B_Q4_K_M.gguf
