@@ -7,7 +7,7 @@ PARAM_SYSTEM_PROMPT = PromptTemplate(input_variables=["n_valid_values", "n_inval
  
 **Rules**
 1. All values **must** satisfy **all** OpenAPI schema constraints.
-2. All values **must** follow any implied format in the parameter description  
+2. All values **must** follow any implied format in the parameter name or description
    _(e.g. ISO-8601 date, UUID, country code, ZIP code)_.
 3. Each value **must** be unique.""")
 
